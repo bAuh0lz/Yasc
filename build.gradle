@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+    id 'com.google.protobuf' version '0.9.4'
+    id 'com.gradleup.shadow' version "8.3.6"
+}
+
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+def grpcVersion = '1.70.0' // CURRENT_GRPC_VERSION
+def protobufVersion = '3.25.5'
+def protocVersion = protobufVersion
+dependencies {
+    compileOnly 'net.portswigger.burp.extensions:montoya-api:2024.12'
+
+    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+    implementation "io.grpc:grpc-services:${grpcVersion}"
+    implementation "io.grpc:grpc-stub:${grpcVersion}"
+    compileOnly "org.apache.tomcat:annotations-api:6.0.53"
+    runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
+
+    implementation 'io.grpc:grpc-netty:1.70.0'
+}
+
+jar {
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+}
+
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:${protocVersion}" }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
+    }
+}
+
+// Inform IDEs like IntelliJ IDEA, Eclipse or NetBeans about the generated code.
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}
+
+// https://github.com/grpc/grpc-java/issues/10853#issuecomment-1917363853
+shadowJar {
+    mergeServiceFiles()
+}

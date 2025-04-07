@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "script";
+option java_outer_classname = "ScriptProto";
+
+package script;
+
+service Script {
+  rpc RunScript (RunScriptRequest) returns (RunScriptReply) {}
+}
+
+message RunScriptRequest {
+  string scriptPath = 1;
+  optional bytes httpRequest = 2;
+  optional bytes httpResponse = 3;
+  bool isPostScript=4;
+}
+
+message RunScriptReply {
+  optional bytes modifiedRequestToBeSent = 1;
+  optional string error=2;
+}
+

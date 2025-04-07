@@ -1,0 +1,24 @@
+{
+  "targetToolType": ["REPEATER","INTRUDER","SCANNER","EXTENSIONS"],
+
+  "preScriptParameterName": "YASC_PRE_SCRIPT",
+  "preScriptParameterType": "URL",
+
+  "postScriptParameterName": "YASC_POST_SCRIPT",
+  "postScriptParameterType": "URL",
+
+  "disablePreScriptParameterName": "YASC_PRE_SCRIPT_DISABLED",
+  "disablePreScriptParameterType": "URL",
+
+  "disablePostScriptParameterName": "YASC_POST_SCRIPT_DISABLED",
+  "disablePostScriptParameterType": "URL",
+
+  "exportedRequestDirName": "requests",
+
+  "copiedCodeFormat": "res = util.send_request(\"$BASE_URL\", \"requests/$REQUEST_FILE_NAME\", {}) # $METHOD $URL\n",
+
+  "useCollaborator":true,
+
+  "cancelRequestOnScriptError": true,
+  "cancelRequestPort": 1
+}
